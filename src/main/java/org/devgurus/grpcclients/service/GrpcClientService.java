@@ -30,20 +30,6 @@ public class GrpcClientService {
     }
 
 
-//    private String getGreetingMessage(String name) {
-//
-//        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
-//
-//        // Prepare the gRPC request
-//        GreetingRequest request = GreetingRequest.newBuilder()
-//                .setName(name)
-//                .build();
-//
-//        // Call the gRPC server and return the response
-//        GreetingResponse response = stub.greet(request);
-//        return response.getMessage();
-//    }
-
     private FraudCheckResponse doFraudCheck(ClientRequest request) {
         FraudCheckServiceGrpc.FraudCheckServiceBlockingStub stub = FraudCheckServiceGrpc.newBlockingStub(channel);
 
