@@ -9,8 +9,8 @@ import org.springframework.util.RouteMatcher;
 @Builder
 public class ClientRequest {
 
-    @NotNull(message = "Message must not be null")
-    private String name;
+    @NotNull(message = "Amount must not be null")
+    private double amount;
 
     @NotNull(message = "Route must not be null")
     private String route;

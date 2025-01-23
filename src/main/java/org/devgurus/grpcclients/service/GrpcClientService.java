@@ -3,9 +3,7 @@ package org.devgurus.grpcclients.service;
 import io.grpc.ManagedChannel;
 import org.devgurus.grpcclients.dto.ClientRequest;
 import org.devgurus.grpcclients.dto.ClientResponse;
-import org.devgurus.grpcimplementation.GreetingRequest;
-import org.devgurus.grpcimplementation.GreetingResponse;
-import org.devgurus.grpcimplementation.GreetingServiceGrpc;
+import org.devgurus.grpcimplementation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,21 +19,41 @@ public class GrpcClientService {
     }
 
     public ClientResponse callClient(ClientRequest request) {
-        String response = getGreetingMessage(request.getName());
+        FraudCheckResponse fraudCheckResponse = doFraudCheck(request);
         String grpcServiceName = "grpc-client";
-        return new ClientResponse(response, grpcServiceName);
+        return ClientResponse.builder()
+                .fraudTransaction(fraudCheckResponse.getFraudTransaction())
+                .pastTransactionCountGenerated(fraudCheckResponse.getPastTransactionCountGenerated())
+                .message(fraudCheckResponse.getMessage())
+                .route(request.getRoute())
+                .build();
     }
-    private String getGreetingMessage(String name) {
 
-        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+
+//    private String getGreetingMessage(String name) {
+//
+//        GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
+//
+//        // Prepare the gRPC request
+//        GreetingRequest request = GreetingRequest.newBuilder()
+//                .setName(name)
+//                .build();
+//
+//        // Call the gRPC server and return the response
+//        GreetingResponse response = stub.greet(request);
+//        return response.getMessage();
+//    }
+
+    private FraudCheckResponse doFraudCheck(ClientRequest request) {
+        FraudCheckServiceGrpc.FraudCheckServiceBlockingStub stub = FraudCheckServiceGrpc.newBlockingStub(channel);
 
         // Prepare the gRPC request
-        GreetingRequest request = GreetingRequest.newBuilder()
-                .setName(name)
+        FraudCheckRequest grpcRequest = FraudCheckRequest.newBuilder()
+                .setRoute(request.getRoute())
+                .setAmount(request.getAmount())
                 .build();
 
         // Call the gRPC server and return the response
-        GreetingResponse response = stub.greet(request);
-        return response.getMessage();
+        return stub.fraudCheck(grpcRequest);
     }
 }

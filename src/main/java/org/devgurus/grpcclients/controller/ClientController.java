@@ -1,6 +1,7 @@
 package org.devgurus.grpcclients.controller;
 
 import com.google.api.Http;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.devgurus.grpcclients.dto.ClientRequest;
 import org.devgurus.grpcclients.dto.ClientResponse;

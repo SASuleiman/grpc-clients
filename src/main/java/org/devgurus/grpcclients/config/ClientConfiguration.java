@@ -12,7 +12,7 @@ public class ClientConfiguration {
     @Value("${GRPC_HOST:localhost}")
     private String host;
 
-    @Value("${GRPC_PORT:9020}")
+    @Value("${GRPC_PORT:50051}")
     private int port;
 
     @Bean

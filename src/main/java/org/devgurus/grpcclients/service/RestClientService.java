@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.devgurus.grpcclients.client.RestFeignClient;
-import org.devgurus.grpcclients.dto.ClientRequest;
-import org.devgurus.grpcclients.dto.ClientResponse;
-import org.devgurus.grpcclients.dto.RestGreetingRequest;
-import org.devgurus.grpcclients.dto.RestGreetingResponse;
+import org.devgurus.grpcclients.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +17,12 @@ public class RestClientService {
 
     public ClientResponse callRestClient(ClientRequest request) {
         String route = "rest-client";
-        RestGreetingResponse response = client.greet(new RestGreetingRequest(request.getName()));
-        return new ClientResponse(response.getMessage(),route);
+        RestFraudCheckResponse response = client.doFraudCheck(request.getAmount());
+        return ClientResponse.builder()
+                .route(request.getRoute())
+                .message(response.getMessage())
+                .fraudTransaction(response.isFraudTransaction())
+                .pastTransactionCountGenerated(response.getPastTransactionCountGenerated())
+                .build();
     }
 }
