@@ -15,9 +15,11 @@ public class RestClientService {
 
     private final RestFeignClient client;
 
+    private final FraudCheckService checkService;
+
     public ClientResponse callRestClient(ClientRequest request) {
         String route = "rest-client";
-        RestFraudCheckResponse response = client.doFraudCheck(request.getAmount());
+        RestFraudCheckResponse response = checkService.doFraudCheck(request.getAmount());
         return ClientResponse.builder()
                 .route(request.getRoute())
                 .message(response.getMessage())
